@@ -84,19 +84,37 @@ def appointment():
         flash("Appointment booked successfully!")
     return render_template('appointment.html')
 
+@app.route('/report', methods=['GET', 'POST'])
+@login_required
+def report():
+    if request.method == 'POST':
+        patient_name = request.form['patient_name']
+        report_details = request.form['report_details']
+        
+        new_report = Report(patient_name=patient_name, report_details=report_details)
+        db.session.add(new_report)
+        db.session.commit()
+        flash("Report added successfully!", "success")
+        return redirect(url_for('report'))
+
+    reports = Report.query.all()
+    return render_template('report.html', reports=reports)
+
+
 @app.route('/report/<int:patient_id>')
 @login_required
 def generate_report(patient_id):
     if current_user.role != "doctor":
         flash("Only doctors can generate reports")
         return redirect(url_for('dashboard'))
-    
+
     file_path = f"static/report_{patient_id}.pdf"
     c = canvas.Canvas(file_path)
     c.drawString(100, 750, f"Patient Report for ID: {patient_id}")
     c.drawString(100, 700, "Progress notes and details go here...")
     c.save()
     return f"Report generated: <a href='/{file_path}'>Download</a>"
+
 
 @app.route('/logout')
 def logout():
