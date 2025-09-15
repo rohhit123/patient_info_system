@@ -3,30 +3,37 @@
 <head>
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 </head>
 <body>
     <div class="navbar">
-    <a href="/dashboard">Dashboard</a>
-    <a href="/appointment">Appointments</a>
-    <a href="/report">Reports</a>
-    <a href="/">Logout</a>
-</div>
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul class="flash-messages">
-      {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('appointment') }}">Appointments</a>
+        <a href="{{ url_for('report') }}">Reports</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
 
+    <h2>Welcome, {{ current_user.username }}!</h2>
 
-    <h2>Welcome to Patient Info System</h2>
-    <ul>
-        <li><a href="/appointment">Manage Appointments</a></li>
-        <li><a href="/report">Manage Reports</a></li>
-    </ul>
+    <h3>Your Appointments</h3>
+    {% if appointments %}
+        <ul>
+        {% for appt in appointments %}
+            <li>{{ appt.date }} {{ appt.time }} with Dr. {{ appt.doctor }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No appointments yet.</p>
+    {% endif %}
+
+    <h3>Your Reports</h3>
+    {% if reports %}
+        <ul>
+        {% for r in reports %}
+            <li>{{ r.date_created.strftime("%Y-%m-%d %H:%M") }} - {{ r.report_details }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No reports yet.</p>
+    {% endif %}
 </body>
 </html>
