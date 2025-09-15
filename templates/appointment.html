@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appointments</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <div class="navbar">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/appointment">Appointments</a>
+    <a href="/report">Reports</a>
+    <a href="/">Logout</a>
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+
+    <h2>Appointments</h2>
+    <form method="POST">
+        <input type="text" name="patient_name" placeholder="Patient Name" required><br>
+        <input type="date" name="date" required><br>
+        <input type="time" name="time" required><br>
+        <input type="text" name="doctor" placeholder="Doctor Name" required><br>
+        <button type="submit">Add Appointment</button>
+    </form>
+    <h3>All Appointments</h3>
+    <ul>
+        {% for appt in appointments %}
+        <li>{{ appt.patient_name }} - {{ appt.date }} {{ appt.time }} - Dr. {{ appt.doctor }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

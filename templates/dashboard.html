@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <div class="navbar">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/appointment">Appointments</a>
+    <a href="/report">Reports</a>
+    <a href="/">Logout</a>
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+
+    <h2>Welcome to Patient Info System</h2>
+    <ul>
+        <li><a href="/appointment">Manage Appointments</a></li>
+        <li><a href="/report">Manage Reports</a></li>
+    </ul>
+</body>
+</html>
